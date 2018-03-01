@@ -62,23 +62,6 @@ module.exports = {
         })
       },
       {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        enforce: 'pre',
-        loader: 'tslint-loader'
-      },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'ts-loader',
-            options: { appendTsxSuffixTo: [/\.vue$/] }
-          }
-        ]
-      },
-      {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]

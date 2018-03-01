@@ -2,7 +2,11 @@
   <div id="login">
     <div class="center">
       <h1 class="text-center">登录</h1>
+      <iv-alert v-if="errorMessage != ''" type="error">{{ errorMessage }}</iv-alert>
       <iv-form ref="loginForm" :model="loginForm" :rules="loginFormRule" :label-width="80">
+        <iv-form-item label="Username" prop="username">
+            <iv-input type="text" v-model="loginForm.username" />
+        </iv-form-item>
         <iv-form-item label="Password" prop="password">
             <iv-input type="password" v-model="loginForm.password" />
         </iv-form-item>
@@ -15,30 +19,38 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
+import { UserService as userService } from '../../api/user'
 
 @Component
 export default class LoginComponent extends Vue {
-  name = 'login'
+  name = 'login';
+  errorMessage = '';
+  loginForm = {
+    password: '',
+    username: ''
+  };
+  loginFormRule = {
+    username: [
+      { required: true, message: 'username username', trigger: 'blur' }
+    ],
+    password: [
+      { required: true, message: 'password required', trigger: 'blur' }
+    ]
+  };
 
-  data () {
-    return {
-      loginForm: {
-        password: ''
-      },
-      loginFormRule: {
-        password: [
-          { required: true, message: 'password required', trigger: 'blur' }
-        ]
-      }
-    }
+  mounted () {
+    userService.logout()
   }
 
   handleSubmit (formName): void {
     this.$refs[formName]['validate']((valid) => {
       console.log(valid)
     })
+  }
+
+  handleReset (formName): void {
+    this.$refs[formName]['resetFields']()
   }
 }
 </script>
