@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { UserService as userService } from '../../api/user'
+import { UserService as userService } from '../../api/userService'
 
 @Component
 export default class LoginComponent extends Vue {
@@ -39,8 +39,9 @@ export default class LoginComponent extends Vue {
     ]
   };
 
-  mounted () {
-    userService.logout()
+  async mounted () {
+    const res = await userService.login('bbb', '1234567')
+    console.log(res)
   }
 
   handleSubmit (formName): void {

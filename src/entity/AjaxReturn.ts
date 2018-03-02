@@ -1,8 +1,8 @@
 
-export class AjaxReturn {
+export class AjaxReturn<T> {
   stateCode: number
   message?: string
-  data?: any
+  data?: T
 }
 
 
