@@ -4,7 +4,9 @@
       "require": true
     },
     "rules": {
-      "no-consecutive-blank-lines": false
+      "no-consecutive-blank-lines": false,
+      "ignoreComments": true,
+      "skipBlankLines": true
     }
 }
   

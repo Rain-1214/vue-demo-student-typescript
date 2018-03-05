@@ -7,6 +7,9 @@ declare module '*.vue' {
 declare module 'iview' {
     
     import { CreateElement } from 'vue';
+
+    class Row {}
+    class Col{}
     class Button {}
     class Form {}
     class Input {}

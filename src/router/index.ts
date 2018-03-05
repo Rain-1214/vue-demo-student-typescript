@@ -1,7 +1,9 @@
 import Vue, { Component } from 'vue'
-import Router, { RouterOptions, Route } from 'vue-router'
+import Router from 'vue-router'
 
-import LoginComponent from '../components/login/Login.vue'
+const LoginComponent = () => import('../components/login/Login.vue')
+const RegisterComponent = () => import('../components/register/Register.vue')
+const StudentComponent = () => import('../components/student/Student.vue')
 
 Vue.use(Router)
 
@@ -15,6 +17,14 @@ export default new Router({
     {
       path: '/login',
       component: LoginComponent
+    },
+    {
+      path: '/register',
+      component: RegisterComponent
+    },
+    {
+      path: '/student',
+      component: StudentComponent
     },
     {
       path: '*',

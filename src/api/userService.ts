@@ -61,9 +61,14 @@ export class UserService {
     return this.handleError(res.data, true)
   }
 
-  static async checkUsername (username: string): Promise<boolean | string> {
+  static async checkUsername (username: string): Promise<boolean> {
     const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/checkUsername', { username })
     return res.data.stateCode === 1
+  }
+
+  static async leaveUpUser (): Promise<string | void> {
+    const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/leaveUpUser')
+    return this.handleError(res.data)
   }
 
   private static handleError (result: AjaxReturn<any>, returnData?: any) {
