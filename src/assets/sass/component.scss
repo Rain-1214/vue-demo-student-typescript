@@ -1,0 +1,19 @@
+@import './_variable.scss';
+@import './_mixin.scss';
+
+.user-layout{
+  width: 100vw;
+  height: 100vh;
+  background: $bg-color-blue;
+  .center{
+    width: 400px;
+    padding: 20px;
+    background: $bg-color-white;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    @include all-center(absolute);
+    h1{
+      margin-bottom: 5px;
+    }
+  }
+}

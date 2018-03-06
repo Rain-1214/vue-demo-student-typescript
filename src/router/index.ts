@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const LoginComponent = () => import('../components/login/Login.vue')
 const RegisterComponent = () => import('../components/register/Register.vue')
+const ForgetPassComponent = () => import('../components/forgetPass/ForgetPass.vue')
 const StudentComponent = () => import('../components/student/Student.vue')
 
 Vue.use(Router)
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/login',
       component: LoginComponent
+    },
+    {
+      path: '/forgetPass',
+      component: ForgetPassComponent
     },
     {
       path: '/register',

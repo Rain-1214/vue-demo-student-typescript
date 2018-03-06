@@ -1,15 +1,10 @@
 import { Getter, GetterTree, MutationTree } from 'vuex'
-import { UPDATE_USER_ROLE, UPDATE_USERNAME } from '../mutation-types'
+import { Types } from '../mutation-types'
 
 
 interface UserState {
   userRole: string,
   username: string
-}
-
-interface UserGetters {
-  getUserRole: Getter<UserState, null>,
-  getUsername: Getter<UserState, null>,
 }
 
 const state: UserState = {
@@ -28,10 +23,10 @@ const actions = {
 }
 
 const mutations: MutationTree<UserState> = {
-  [UPDATE_USER_ROLE] (state: UserState, { userRole }: { userRole: string }) {
+  [Types.UPDATE_USER_ROLE] (state: UserState, { userRole }: { userRole: string }) {
     state.userRole = userRole
   },
-  [UPDATE_USERNAME] (state: UserState, { username }: { username: string }) {
+  [Types.UPDATE_USERNAME] (state: UserState, { username }: { username: string }) {
     state.username = username
   }
 }

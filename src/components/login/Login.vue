@@ -1,9 +1,9 @@
 <template>
-  <div id="login">
+  <div id="login" class="user-layout">
     <div class="center">
       <h1 class="text-center">登录</h1>
       <iv-alert v-if="errorMessage != ''" type="error">{{ errorMessage }}</iv-alert>
-      <iv-form ref="loginForm" :model="loginForm" :rules="loginFormRule" :label-width="80">
+      <iv-form ref="loginForm" :model="loginForm" :rules="loginFormRules" :label-width="80">
         <iv-form-item label="Username" prop="username">
           <iv-input type="text" v-model="loginForm.username" />
         </iv-form-item>
@@ -33,7 +33,7 @@
 import { Component, Vue } from 'vue-property-decorator'
 import { UserService as userService } from '../../api/userService'
 import { Mutation, Getter } from 'vuex-class'
-import { UPDATE_USER_ROLE, UPDATE_USERNAME } from '../../store/mutation-types'
+import { Types } from '../../store/mutation-types'
 
 @Component
 export default class LoginComponent extends Vue {
@@ -44,7 +44,7 @@ export default class LoginComponent extends Vue {
     password: '',
     username: ''
   };
-  loginFormRule = {
+  loginFormRules = {
     username: [
       { required: true, message: 'username username', trigger: 'blur' }
     ],
@@ -54,8 +54,8 @@ export default class LoginComponent extends Vue {
   };
 
   @Getter('getUserRole') userRole
-  @Mutation(UPDATE_USER_ROLE) updateUserRole
-  @Mutation(UPDATE_USERNAME) updateUsername
+  @Mutation(Types.UPDATE_USER_ROLE) updateUserRole
+  @Mutation(Types.UPDATE_USERNAME) updateUsername
 
   handleSubmit (formName): void {
     this.$refs[formName]['validate'](async (valid) => {
@@ -71,20 +71,5 @@ export default class LoginComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-  @import '../../assets/sass/_variable.scss';
-  @import '../../assets/sass/_mixin.scss';
 
-  #login{
-    width: 100vw;
-    height: 100vh;
-    background: $bg-color-blue;
-    .center{
-      width: 400px;
-      padding: 20px;
-      background: $bg-color-white;
-      border-radius: 15px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.3);
-      @include all-center(absolute);
-    }
-  }
 </style>

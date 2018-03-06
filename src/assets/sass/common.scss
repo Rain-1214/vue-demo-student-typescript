@@ -1,3 +1,6 @@
+@import './component.scss';
+
+// tool class 
 .text-center{
   text-align: center;
 }
@@ -9,3 +12,16 @@
 .clear-margin-bottom {
   margin-bottom: 0 !important;
 }
+
+// button style
+.btn-block{
+  display: block;
+  width: 100%;
+}
+
+.btn-sm-padding{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+

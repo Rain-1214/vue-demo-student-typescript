@@ -21,18 +21,20 @@ export class UserService {
     return this.handleError(res.data)
   }
 
-  static async getEmailCode (emailAddress: string): Promise<void> {
+  static async getEmailCode (emailAddress: string): Promise<boolean> {
     const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/getEmailCode', { email: emailAddress })
     if (res.data.stateCode === 1) {
       Notice.success({
-        title: '成功',
-        desc: res.data.message
+        title: '验证码发送成功',
+        desc: '验证码发送成功，请到对应邮箱查看'
       })
+      return true
     } else {
       Notice.error({
         title: '有一个错误',
         desc: res.data.message
       })
+      return false
     }
   }
 
