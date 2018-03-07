@@ -31,7 +31,7 @@
           </iv-form-item>
         </iv-form>
       </template>
-      <template v-if="currentStep === 3">
+      <div v-if="currentStep === 3">
         <iv-form ref="setNewPassForm" :model="setNewPassForm" :rules="setNewPassFormRules" :label-width="120">
           <iv-form-item label="Password" prop="password">
             <iv-input type="password" v-model="setNewPassForm.password" />
@@ -43,7 +43,7 @@
             <iv-button type="primary" @click="handleSetNewPass('setNewPassForm')">提交</iv-button>
           </iv-form-item>
         </iv-form>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -143,8 +143,8 @@ export default class ForgetPassComponent extends Vue {
     })
   }
 
-  handleSetNewPass (fromName): void {
-    this.$refs[fromName]['validate'](async (valid: boolean) => {
+  handleSetNewPass (formName): void {
+    this.$refs[formName]['validate'](async (valid: boolean) => {
       if (valid) {
         this.btnLoading = true
         const res = await UserService.setNewPass(this.setNewPassForm.password)
@@ -153,7 +153,7 @@ export default class ForgetPassComponent extends Vue {
             title: '成功',
             desc: '修改成功,即将跳转至登录界面'
           })
-          setInterval(() => {
+          setTimeout(() => {
             this.$router.push('/login')
           }, 1500)
         }

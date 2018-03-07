@@ -1,4 +1,3 @@
-import { Provide } from 'vue-property-decorator'
 import axios, { AxiosResponse } from 'axios'
 import { AjaxReturn } from '../entity/AjaxReturn'
 import { Notice } from 'iview'

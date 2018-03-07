@@ -8,6 +8,8 @@ declare module 'iview' {
     
     import { CreateElement } from 'vue';
 
+    class Select {}
+    class Option {}
     class Icon {}
     class Row {}
     class Col{}

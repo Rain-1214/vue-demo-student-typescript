@@ -1,19 +1,38 @@
 <template>
   <div id="student">
-    student
+    <p class="header">
+      用户 {{ username }} 身份 {{ userRole }}
+    </p>
+    <iv-row>
+      <iv-col span="16">
+        <grade-select></grade-select>
+      </iv-col>
+    </iv-row>
   </div>
 </template>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { State } from 'vuex-class'
+import { Getter } from 'vuex-class'
+import GradeSelectComponent from './children/GradeSelect.vue'
 
-@Component
+@Component({
+  components: {
+    'grade-select': GradeSelectComponent
+  }
+})
 export default class StudentComponent extends Vue {
-  @State('User') userRole
+  name = 'student'
+
+  @Getter('getUsername') username
+  @Getter('getUserRole') userRole
 
   mounted () {
-    console.log(this.userRole)
   }
 }
 </script>
+<style lang="scss" scoped>
+.header{
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+</style>
