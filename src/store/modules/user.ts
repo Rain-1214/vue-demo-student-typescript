@@ -1,9 +1,10 @@
 import { Getter, GetterTree, MutationTree } from 'vuex'
 import { Types } from '../mutation-types'
 import { User } from '../../entity/User'
+import { RootState } from '..'
 
 
-interface UserState {
+export interface UserState {
   userRole: string,
   username: string
 }
@@ -13,7 +14,7 @@ const state: UserState = {
   username: ''
 }
 
-const getters: GetterTree<UserState, null> = {
+const getters: GetterTree<UserState, RootState> = {
   getUserRole: (state) => state.userRole,
   getUsername: (state) => state.username
 }
