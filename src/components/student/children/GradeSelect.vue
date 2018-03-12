@@ -1,16 +1,16 @@
 <template>
-  <div id="gradeSelect">
-    <iv-col :span="col">
-      <iv-select v-model="selectGrade" clearable>
+  <iv-row id="gradeSelect" type="flex" :gutter="0">
+    <iv-col class="clear-padding-left" :span="col" :style="{'padding-right': selectBetween / 2}">
+      <iv-select v-model="selectGrade" clearable :size="size">
         <iv-option v-for="(item, i) in gradeArray" :value="item.id" :key="i">{{ item.gradeName }}</iv-option>
       </iv-select>
     </iv-col>
-    <iv-col :span="col">
-      <iv-select v-model="selectClass" clearable>
+    <iv-col class="clear-padding-right" :span="col" :style="{'padding-left': selectBetween / 2}">
+      <iv-select v-model="selectClass" clearable :size="size">
         <iv-option v-for="(item, i) in classArray" :value="item.id" :key="i">{{ item.className }}</iv-option>
       </iv-select>
     </iv-col>
-  </div>
+  </iv-row>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, Watch, Emit } from 'vue-property-decorator'
@@ -27,7 +27,11 @@ export default class GradeSelectComponent extends Vue {
   selectGrade: number = null
   selectClass: number = null
 
+  @Prop([String]) size: string
+  @Prop({ default: 15, type: [Number] }) selectBetween: number
   @Prop({ default: 6 }) col: number
+  @Prop([Number, String]) defaultGrade: number
+  @Prop([Number, String]) defaultClass: number
   @Getter('getgradeArray') getGradeArray
   @Emit()
   selectGradeId (id: number) {}
@@ -36,16 +40,16 @@ export default class GradeSelectComponent extends Vue {
 
   async created () {
     this.gradeArray = await this.getGradeArray
+    if (this.defaultGrade && this.defaultClass) {
+      this.selectGrade = this.defaultGrade
+      this.selectClass = this.defaultClass
+    }
   }
 
   @Watch('selectGrade')
   setClassArray () {
-    if (this.selectGrade) {
-      this.selectGradeId(this.selectGrade)
-      this.classArray = this.gradeArray.filter(e => e.id === this.selectGrade)[0].classes
-    } else {
-      this.classArray = []
-    }
+    this.selectGradeId(this.selectGrade)
+    this.classArray = this.selectGrade ? this.gradeArray.filter(e => e.id === this.selectGrade)[0].classes : []
   }
 
   @Watch('selectClass')
@@ -55,5 +59,10 @@ export default class GradeSelectComponent extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-
+.clear-padding-left {
+  padding-left: 0 !important;
+}
+.clear-padding-right {
+  padding-right: 0 !important;
+}
 </style>

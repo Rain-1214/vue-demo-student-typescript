@@ -23,6 +23,23 @@ const getters: GetterTree<StudentState, RootState> = {
       }
     }
     return state.gradeArray
+  },
+  getGradeNameClassNameByGidCid: (state, getters) => async (gradeId: number, classId: number) => {
+    if (state.gradeArray.length === 0) {
+      await getters.getgradeArray()
+    }
+    let result = ''
+    state.gradeArray.forEach(e => {
+      if (e.id === gradeId) {
+        result += e.gradeName
+        e.classes.forEach((item) => {
+          if (item.id === classId) {
+            result += item.className
+          }
+        })
+      }
+    })
+    return result
   }
 }
 

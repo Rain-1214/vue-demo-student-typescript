@@ -13,7 +13,7 @@
         <iv-button type="primary" @click="getStudentByGidCid()">查找</iv-button>
       </iv-col>
     </iv-row>
-    <iv-row class="set-tb-padding student-wrapper" :gutter="15">
+    <iv-row class="set-tb-padding" :gutter="15">
       <iv-col span="8"
         v-for="(v, i) in students" :key="i">
         <student-wrapper :student="v"></student-wrapper>
@@ -93,10 +93,6 @@ export default class StudentComponent extends Vue {
   border-bottom: 1px solid #ccc;
 }
 .set-tb-padding{
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.student-wrapper{
-  padding-left: 10px;
+  padding: 10px 0 10px 10px;
 }
 </style>
