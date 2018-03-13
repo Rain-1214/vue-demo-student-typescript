@@ -69,7 +69,7 @@ export class ToolBase {
 
   static isNumber (value): boolean {
     const valueTag = typeof value
-    return valueTag === 'number'
+    return valueTag === 'number' || (this.isObject(value) && this.getValueTag(value) === this.tag.numberTag)
   }
 
   static isMap (value) {

@@ -13,7 +13,7 @@ export class Equal extends ToolBase {
    */
   static deepEqual (resource: any, target: any): boolean {
     if (!this.checkIsObjectOrArray(resource, target)) {
-      throw new Error('参数必须为对象或者数组')
+      throw new Error('Equal:deepEqual:params must be array or object')
     }
     const resourceKeys = Object.keys(resource)
     resourceKeys.forEach(e => {

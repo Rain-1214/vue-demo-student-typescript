@@ -1,0 +1,11 @@
+.small-error {
+  .ivu-form-item-error-tip {
+    padding-top: 2px !important;
+  }
+}
+
+.hidden-error-icon {
+  .ivu-form-item-label:before {
+    display: none;
+  }
+}

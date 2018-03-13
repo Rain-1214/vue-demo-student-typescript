@@ -1,11 +1,11 @@
 <template>
-  <iv-row id="gradeSelect" type="flex" :gutter="0">
-    <iv-col class="clear-padding-left" :span="col" :style="{'padding-right': selectBetween / 2}">
+  <iv-row id="gradeSelect" type="flex">
+    <iv-col class="clear-padding-left" :span="col" :style="{'paddingRight': selectBetween / 2 + 'px'}">
       <iv-select v-model="selectGrade" clearable :size="size">
         <iv-option v-for="(item, i) in gradeArray" :value="item.id" :key="i">{{ item.gradeName }}</iv-option>
       </iv-select>
     </iv-col>
-    <iv-col class="clear-padding-right" :span="col" :style="{'padding-left': selectBetween / 2}">
+    <iv-col class="clear-padding-right" :span="col" :style="{'paddingLeft': selectBetween / 2 + 'px'}">
       <iv-select v-model="selectClass" clearable :size="size">
         <iv-option v-for="(item, i) in classArray" :value="item.id" :key="i">{{ item.className }}</iv-option>
       </iv-select>
@@ -42,13 +42,16 @@ export default class GradeSelectComponent extends Vue {
     this.gradeArray = await this.getGradeArray
     if (this.defaultGrade && this.defaultClass) {
       this.selectGrade = this.defaultGrade
-      this.selectClass = this.defaultClass
+      this.$nextTick(() => {
+        this.selectClass = this.defaultClass
+      })
     }
   }
 
   @Watch('selectGrade')
   setClassArray () {
     this.selectGradeId(this.selectGrade)
+    this.selectClass = null
     this.classArray = this.selectGrade ? this.gradeArray.filter(e => e.id === this.selectGrade)[0].classes : []
   }
 

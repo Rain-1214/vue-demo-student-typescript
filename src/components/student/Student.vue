@@ -11,12 +11,24 @@
       </iv-col>
       <iv-col span="12">
         <iv-button type="primary" @click="getStudentByGidCid()">查找</iv-button>
+        <iv-button type="error" @click="deleteFlag = true" v-show="!deleteFlag">勾选删除</iv-button>
+        <iv-button type="primary" @click="deleteFlag = false" v-show="deleteFlag">取消勾选删除</iv-button>
+        <iv-button type="error" @click="deleteStudent()" v-show="deleteFlag">删除</iv-button>
       </iv-col>
     </iv-row>
     <iv-row class="set-tb-padding" :gutter="15">
       <iv-col span="8"
         v-for="(v, i) in students" :key="i">
-        <student-wrapper :student="v"></student-wrapper>
+        <student-wrapper :student="v" :deleteVisible='deleteFlag'
+          @emit-delete-student-id="receiveDeleteId($event)"></student-wrapper>
+      </iv-col>
+    </iv-row>
+    <iv-row>
+      <iv-col span="12">
+        <iv-button type="success"></iv-button>
+      </iv-col>
+      <iv-col class="text-right" span="12">
+        <iv-page :total="studentCountNum" @on-change="currentPageChange($event)"></iv-page>
       </iv-col>
     </iv-row>
   </div>
@@ -28,7 +40,7 @@ import GradeSelectComponent from './children/GradeSelect.vue'
 import { Grade } from '../../entity/grade'
 import { StudentService } from '../../api/studentService'
 import { Student } from '../../entity/student'
-import StudentWrapperComponent from './children/studentWrapper.vue'
+import StudentWrapperComponent, { DeleteStuMessage } from './children/studentWrapper.vue'
 
 @Component({
   components: {
@@ -47,13 +59,26 @@ export default class StudentComponent extends Vue {
   currentGradeId: number = null
   currentClassId: number = null
 
+  deleteFlag = false
+  deleteStuIds: Set<number> = new Set()
+
+  privateCurrentPage = 1
+  get currentPage () {
+    return this.privateCurrentPage
+  }
+
+  set currentPage (page: number) {
+    this.privateCurrentPage = page
+    this.loadStudent(page)
+  }
+
   @Getter('getUsername') username
   @Getter('getUserRole') userRole
   @Getter('getgradeArray') getGradeArray
 
   async created () {
     this.gradeArray = await this.getGradeArray
-    await this.loadStudent(1)
+    await this.loadStudent(this.currentPage)
   }
 
   mounted () {
@@ -67,6 +92,14 @@ export default class StudentComponent extends Vue {
     this.currentClassId = id
   }
 
+  receiveDeleteId (deleteStuMessage: DeleteStuMessage) {
+    if (deleteStuMessage.flag) {
+      this.deleteStuIds.add(deleteStuMessage.studentId)
+    } else {
+      this.deleteStuIds.delete(deleteStuMessage.studentId)
+    }
+  }
+
   async loadStudent (page: number) {
     const res = await StudentService.getStudent(page)
     if (res) {
@@ -77,6 +110,18 @@ export default class StudentComponent extends Vue {
 
   getStudentByGidCid () {
 
+  }
+
+  currentPageChange (pageNumber: number) {
+    this.currentPage = pageNumber
+  }
+
+  async deleteStudent () {
+    const ids = Array.from(this.deleteStuIds)
+    const res = await StudentService.deleteStudent(ids)
+    if (res) {
+      await this.loadStudent(this.currentPage)
+    }
   }
 
   destoryed () {

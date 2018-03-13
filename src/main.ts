@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 
-import './ivew.config'
+import './iview.config'
 
 import 'iview/dist/styles/iview.css'
 import './assets/sass/common.scss'
