@@ -101,7 +101,6 @@ export default class RegisterComponent extends Vue {
   }
 
   triggerCheckPasswordAgain (rule, value, callback): void {
-    console.log(rule)
     if (this.registerForm.passwordAgain !== '') {
       this.$refs.registerForm['validateField']('passwordAgain')
       callback()

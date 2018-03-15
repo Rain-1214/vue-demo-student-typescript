@@ -1,7 +1,7 @@
 <template>
   <div id="stuentWrapper">
-    <div v-show='deleteVisible'>
-      <iv-checkbox v-model="deleteFlag">{{ deleteFlag ? '已选择' : '选择此人' }}</iv-checkbox>
+    <div v-show='selectVisible'>
+      <iv-checkbox v-model="selectFlag">{{ selectFlag ? '已选择' : '选择此人' }}</iv-checkbox>
     </div>
     <iv-form class="small-error hidden-error-icon" ref="updateForm" :model="updateForm" :rules="updateFormRules" :label-width="50">
       <iv-form-item label="姓名" prop="name">
@@ -25,10 +25,15 @@
           @select-grade-id="receiveGid($event)" @select-class-id="receiveCid($event)"></grade-select>
         <template v-else>{{ fullGradeName }}</template>
       </iv-form-item>
-      <div class="button-group">
+      <div class="button-group" v-if="model === 'normal'">
         <iv-button type="primary" @click="updateFlag = true" v-show="!updateFlag" size="small">修改</iv-button>
         <iv-button type="default" @click="cancleUpdate()" v-show="updateFlag" size="small">取消修改</iv-button>
         <iv-button type="primary" @click="confirmUpdate()" v-show="updateFlag" size="small">提交修改</iv-button>
+      </div>
+      <div class="button-group" v-if="model === 'add'">
+        <iv-button type="primary" @click="addSingleStudent(arrayIndex)" size="small">添加此人</iv-button>
+        <iv-button type="default" @click="resetForm('updateForm')" size="small">重置</iv-button>
+        <iv-button type="error" @click="deleteAddStudent(arrayIndex)" size="small">删除此个添加</iv-button>
       </div>
     </iv-form>
     <iv-modal
@@ -70,9 +75,15 @@ import { Message } from 'iview'
 import GradeSelectComponent from './GradeSelect.vue'
 import { Equal } from '../../../tool/Equal'
 
-export interface DeleteStuMessage {
+export interface SelectStuMessage {
   flag: boolean,
-  studentId: number
+  studentId?: number,
+  index?: number
+}
+
+export interface AddStuMessage {
+  index: number,
+  student: Student
 }
 
 @Component({
@@ -110,18 +121,23 @@ export default class StudentWrapperComponent extends Vue {
 
   submitUpdateLoading = false
   updateConfirmFlag = false
-  deleteFlag = false
+  selectFlag = false
 
   fullGradeName: string = ''
   modifyGradeName: string = ''
   gradeArray: Grade[]
 
-  @Prop() deleteVisible: boolean
+  @Prop() selectVisible: boolean
   @Prop([Object]) student: Student
+  @Prop({ default: 'normal' }) model: string
+  @Prop() arrayIndex: number
   @Getter('getGradeNameClassNameByGidCid') getFullGradeName
 
   created () {
     this.updateForm = Object.assign(this.updateForm, this.student)
+    if (this.model === 'add') {
+      this.updateFlag = true
+    }
     this.loadGradeName()
   }
 
@@ -186,19 +202,40 @@ export default class StudentWrapperComponent extends Vue {
     }
   }
 
-  @Watch('deleteVisible')
-  onDeleteVisibleChange () {
-    this.deleteFlag = false
+  resetForm (formName: string) {
+    this.$refs[formName]['resetFields']()
   }
 
-  @Watch('deleteFlag')
-  onDeleteFlagChange () {
-    this.emitDeleteStudentId({flag: this.deleteFlag, studentId: this.student.id})
+  @Watch('updateForm', { deep: true })
+  onUpadateFormChange () {
+    if (this.model === 'add') {
+      this.emitAddStudent({ index: this.arrayIndex, student: this.updateForm })
+    }
+  }
+
+  @Watch('selectVisible')
+  onselectVisibleChange () {
+    this.selectFlag = false
+  }
+
+  @Watch('selectFlag')
+  onSelectFlagChange () {
+    const data = this.model === 'normal' ? {flag: this.selectFlag, studentId: this.student.id} : {flag: this.selectFlag, index: this.arrayIndex}
+    this.emitStudentId(data)
   }
 
   @Emit()
-  emitDeleteStudentId (deleteStuMessage: DeleteStuMessage) {
+  emitAddStudent (addStuMessage: AddStuMessage) {}
+
+  @Emit()
+  emitStudentId (deleteStuMessage: SelectStuMessage) {
   }
+
+  @Emit()
+  addSingleStudent (index: number) {}
+
+  @Emit()
+  deleteAddStudent (index: number) {}
 }
 </script>
 <style lang="scss" scoped>

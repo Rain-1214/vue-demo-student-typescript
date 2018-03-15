@@ -1,10 +1,12 @@
 import Vue, { Component } from 'vue'
 import Router from 'vue-router'
+declare const require: any
 
-const LoginComponent = () => import('../components/login/Login.vue')
-const RegisterComponent = () => import('../components/register/Register.vue')
-const ForgetPassComponent = () => import('../components/forgetPass/ForgetPass.vue')
-const StudentComponent = () => import('../components/student/Student.vue')
+const LoginComponent = r => require.ensure([], () => r(require('../components/login/Login.vue')), 'login')
+const RegisterComponent = r => require.ensure([], () => r(require('../components/register/Register.vue')), 'register')
+const ForgetPassComponent = r => require.ensure([], () => r(require('../components/forgetPass/ForgetPass.vue')), 'forgetPass')
+const StudentComponent = r => require.ensure([], () => r(require('../components/student/Student.vue')), 'student')
+const UserComponent = r => require.ensure([], () => r(require('../components/user/User.vue')), 'user')
 
 Vue.use(Router)
 
@@ -30,6 +32,10 @@ export default new Router({
     {
       path: '/student',
       component: StudentComponent
+    },
+    {
+      path: '/user',
+      component: UserComponent
     },
     {
       path: '*',

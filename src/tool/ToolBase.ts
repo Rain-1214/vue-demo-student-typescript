@@ -194,15 +194,26 @@ export class ToolBase {
    * @param {String[]} property? 检测的属性
    * @returns {boolean} 检测的属性当中存在无效值 false 否则 true
    */
-  static checkEmptyProperty (target: Object | Array<string>, property?: string[]): boolean {
-    console.log(this.getValueTag(target))
-    if (this.getValueTag(target) !== this.tag.objectTag && this.getValueTag(target) !== this.tag.arrayTag) {
+  static checkEmptyProperty (target: any, property?: string[]): boolean {
+    if (this.getValueTag(target) === this.tag.objectTag) {
+      const checkPropertys = property ? property : Object.keys(target)
+      return checkPropertys.every((e) => {
+        return target[e] !== undefined && target[e] !== null && target[e] !== ''
+      })
+    } else if (this.getValueTag(target) === this.tag.arrayTag) {
+      let result = true
+      target.forEach((e) => {
+        const currentTag = this.getValueTag(e)
+        if (currentTag === this.tag.objectTag || currentTag === this.tag.arrayTag) {
+          result = this.checkEmptyProperty(e, property)
+        } else {
+          result = e !== undefined && e !== null && e !== ''
+        }
+      })
+      return result
+    } else {
       throw new Error('target must be Object or Array')
     }
-    const checkPropertys = property ? property : Object.keys(target)
-    return checkPropertys.every((e) => {
-      return target[e] !== undefined && target[e] !== null && target[e] !== ''
-    })
   }
 
 

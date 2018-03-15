@@ -17,7 +17,7 @@ export class UserService {
 
   static async logout (): Promise<boolean | void> {
     const res: AxiosResponse<AjaxReturn<null>> = await axios.get('/api/user/logout')
-    return this.handleError(res.data)
+    return this.handleError(res.data, true)
   }
 
   static async getEmailCode (emailAddress: string): Promise<boolean> {
@@ -67,9 +67,20 @@ export class UserService {
     return res.data.stateCode === 1
   }
 
-  static async leaveUpUser (): Promise<string | void> {
+  static async leaveUpUser (): Promise<boolean | void> {
     const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/leaveUpUser')
-    return this.handleError(res.data)
+    return this.handleError(res.data, true)
+  }
+
+  static async deactiveUser (userId: number): Promise<boolean | void> {
+    const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/disableUser', { userId })
+    return this.handleError(res.data, true)
+  }
+
+  static async activeUser (userId: number): Promise<boolean | void> {
+    const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/activeUser', { userId })
+    console.log(res)
+    return this.handleError(res.data, true)
   }
 
   private static handleError (result: AjaxReturn<any>, returnData?: any) {

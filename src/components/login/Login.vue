@@ -59,13 +59,14 @@ export default class LoginComponent extends Vue {
 
   handleSubmit (formName): void {
     this.$refs[formName]['validate'](async (valid) => {
-      const res = await userService.login(this.loginForm.username, this.loginForm.password)
-      if (res) {
-        this.updateUsername({ username: this.loginForm.username })
-        this.updateUserRole({ userRole: res.userRole })
-        this.$router.push('/student')
+      if (valid) {
+        const res = await userService.login(this.loginForm.username, this.loginForm.password)
+        if (res) {
+          this.updateUsername({ username: this.loginForm.username })
+          this.updateUserRole({ userRole: res.userRole })
+          this.$router.push('/student')
+        }
       }
-      console.log(this.userRole)
     })
   }
 }
