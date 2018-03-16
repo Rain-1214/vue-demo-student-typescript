@@ -60,7 +60,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { Getter } from 'vuex-class'
+import { Getter, Mutation } from 'vuex-class'
 import { Grade } from '../../entity/grade'
 import { StudentService } from '../../api/studentService'
 import { Student } from '../../entity/student'
@@ -68,6 +68,7 @@ import { Message } from 'iview'
 import { ToolBase } from '../../tool/ToolBase'
 import { Route } from 'vue-router'
 import { UserService } from '../../api/userService'
+import { Types } from '../../store/mutation-types'
 import store from '../../store/'
 import GradeSelectComponent from './children/GradeSelect.vue'
 import StudentWrapperComponent, { AddStuMessage, SelectStuMessage } from './children/studentWrapper.vue'
@@ -117,6 +118,7 @@ export default class StudentComponent extends Vue {
   @Getter('getUsername') username
   @Getter('getUserRole') userRole
   @Getter('getgradeArray') getGradeArray
+  @Mutation(Types.UPDATE_USER_ROLE) updateUserRole
 
   async created () {
     this.gradeArray = await this.getGradeArray
@@ -271,17 +273,14 @@ export default class StudentComponent extends Vue {
     }
   }
 
-  async leaveUp() {
+  async leaveUp () {
     const res = await UserService.leaveUpUser()
     if (res) {
       Message.success({
         content: '提升成功'
       })
+      this.updateUserRole({ userRole: res.newAuth })
     }
-  }
-
-  destoryed () {
-
   }
 }
 </script>

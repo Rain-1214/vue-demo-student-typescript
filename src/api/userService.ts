@@ -67,9 +67,9 @@ export class UserService {
     return res.data.stateCode === 1
   }
 
-  static async leaveUpUser (): Promise<boolean | void> {
-    const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/leaveUpUser')
-    return this.handleError(res.data, true)
+  static async leaveUpUser (): Promise<{ newAuth: string } | void> {
+    const res: AxiosResponse<AjaxReturn<{ newAuth: string }>> = await axios.post('/api/user/leaveUpUser')
+    return this.handleError(res.data)
   }
 
   static async deactiveUser (userId: number): Promise<boolean | void> {
@@ -79,7 +79,6 @@ export class UserService {
 
   static async activeUser (userId: number): Promise<boolean | void> {
     const res: AxiosResponse<AjaxReturn<null>> = await axios.post('/api/user/activeUser', { userId })
-    console.log(res)
     return this.handleError(res.data, true)
   }
 
